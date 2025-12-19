@@ -1,12 +1,8 @@
 <!-- 导航栏 -->
-<t-navbar t-class="td-navbar" title="首页">
-  <view slot="left" bindtap="toSearchBLEPage">
-    <t-icon name="search" size="24" />
-  </view>
-</t-navbar>
+<t-navbar t-class="td-navbar" title="首页"></t-navbar>
 
 <view class="main">
-  <view class="header">Vue-mini + TDesign Demo</view>
+  <view class="header">Vibe Coding Template</view>
   <view class="counter">
     <text class="count-label">Count: {{count}}</text>
     <t-button bindtap="increment" theme="primary" class="btn">Increase</t-button>

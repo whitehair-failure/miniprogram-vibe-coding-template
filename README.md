@@ -10,7 +10,7 @@
 npm install
 ```
 
-2. 在微信开发者工具中打开本项目目录 `miniprogram-template`，构建并预览。
+2. 在微信开发者工具中打开本项目目录 `miniprogram-vibe-coding-template`，构建并预览。
 
 ## 项目结构
 
