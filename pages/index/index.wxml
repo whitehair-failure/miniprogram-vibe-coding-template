@@ -1,0 +1,27 @@
+<!-- 导航栏 -->
+<t-navbar t-class="td-navbar" title="首页">
+  <view slot="left" bindtap="toSearchBLEPage">
+    <t-icon name="search" size="24" />
+  </view>
+</t-navbar>
+
+<view class="main">
+  <view class="header">Vue-mini + TDesign Demo</view>
+  <view class="counter">
+    <text class="count-label">Count: {{count}}</text>
+    <t-button bindtap="increment" theme="primary" class="btn">Increase</t-button>
+  </view>
+  <view class="input-row">
+    <input class="input" placeholder="Add an item" value="{{text}}" bindinput="onInput" />
+    <t-button bindtap="addItem" theme="primary">Add</t-button>
+  </view>
+  <view class="list">
+    <block wx:for="{{items}}" wx:key="id">
+      <view class="item">
+        <text class="item-text">{{item.text}}</text>
+        <t-button size="small" class="btn" bindtap="removeItem" data-id="{{item.id}}">Remove</t-button>
+      </view>
+    </block>
+    <view wx:if="{{items.length === 0}}" class="empty">No items yet — add one above.</view>
+  </view>
+</view>

@@ -1,0 +1,16 @@
+{
+  "name": "miniprogram-template",
+  "version": "1.0.0",
+  "main": "app.js",
+  "dependencies": {
+    "@vue-mini/core": "^1.2.8",
+    "tdesign-miniprogram": "^1.12.0"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": ""
+}
