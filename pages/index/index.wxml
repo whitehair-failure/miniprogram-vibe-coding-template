@@ -1,23 +1,105 @@
-<!-- 导航栏 -->
-<t-navbar t-class="td-navbar" title="首页"></t-navbar>
+<t-navbar t-class="td-navbar" title="Todo 清单"></t-navbar>
 
 <view class="main">
-  <view class="header">Vibe Coding Template</view>
-  <view class="counter">
-    <text class="count-label">Count: {{count}}</text>
-    <t-button bindtap="increment" theme="primary" class="btn">Increase</t-button>
-  </view>
-  <view class="input-row">
-    <input class="input" placeholder="Add an item" value="{{text}}" bindinput="onInput" />
-    <t-button bindtap="addItem" theme="primary">Add</t-button>
-  </view>
-  <view class="list">
-    <block wx:for="{{items}}" wx:key="id">
-      <view class="item">
-        <text class="item-text">{{item.text}}</text>
-        <t-button size="small" class="btn" bindtap="removeItem" data-id="{{item.id}}">Remove</t-button>
+  <view class="hero">
+    <view class="eyebrow">今日待办</view>
+    <view class="title">专注完成关键事项</view>
+    <view class="subtitle">简洁清单，快捷勾选与整理</view>
+
+    <view class="stats">
+      <view class="stat primary">
+        <text class="label">全部</text>
+        <text class="value">{{total}}</text>
       </view>
+      <view class="stat success">
+        <text class="label">已完成</text>
+        <text class="value">{{completed}}</text>
+      </view>
+      <view class="stat muted">
+        <text class="label">进行中</text>
+        <text class="value">{{active}}</text>
+      </view>
+    </view>
+  </view>
+
+  <view class="card input-card">
+    <view class="input-row">
+      <input
+        class="input"
+        placeholder="输入待办，回车或点击添加"
+        value="{{text}}"
+        bindinput="onInput"
+        confirm-type="done"
+        bindconfirm="submitOnConfirm"
+      />
+      <t-button bindtap="addItem" theme="primary" shape="round">添加</t-button>
+    </view>
+
+    <view class="filters">
+      <t-tag
+        shape="round"
+        theme="{{filter === 'all' ? 'primary' : 'default'}}"
+        variant="light"
+        data-value="all"
+        bindtap="setFilter"
+      >全部</t-tag>
+      <t-tag
+        shape="round"
+        theme="{{filter === 'active' ? 'primary' : 'default'}}"
+        variant="light"
+        data-value="active"
+        bindtap="setFilter"
+      >进行中</t-tag>
+      <t-tag
+        shape="round"
+        theme="{{filter === 'done' ? 'primary' : 'default'}}"
+        variant="light"
+        data-value="done"
+        bindtap="setFilter"
+      >已完成</t-tag>
+    </view>
+  </view>
+
+  <view class="card list-card">
+    <view class="list-header">
+      <view class="title-block">
+        <text class="title">清单</text>
+        <text class="hint">点击任务可切换完成状态</text>
+      </view>
+      <t-button
+        theme="light"
+        size="small"
+        shape="round"
+        bindtap="clearCompleted"
+        disabled="{{completed === 0}}"
+        style="margin: 0;"
+      >清除已完成</t-button>
+    </view>
+
+    <block wx:if="{{filteredItems.length > 0}}">
+      <block wx:for="{{filteredItems}}" wx:key="id">
+        <view class="todo-item {{item.done ? 'done' : ''}}">
+          <view class="todo-main" bindtap="toggleDone" data-id="{{item.id}}">
+            <view class="check {{item.done ? 'checked' : ''}}">
+              <t-icon name="{{item.done ? 'check-circle-filled' : 'check-circle'}}" size="22px"></t-icon>
+            </view>
+            <view class="text">{{item.text}}</view>
+          </view>
+          <t-button
+            theme="danger"
+            size="small"
+            variant="text"
+            data-id="{{item.id}}"
+            bindtap="removeItem"
+            style="margin: 0;"
+          >删除</t-button>
+        </view>
+      </block>
     </block>
-    <view wx:if="{{items.length === 0}}" class="empty">No items yet — add one above.</view>
+
+    <view wx:else class="empty">
+      <t-icon name="inbox" size="28px"></t-icon>
+      <view class="empty-text">当前筛选下暂无任务，添加一个吧</view>
+    </view>
   </view>
 </view>

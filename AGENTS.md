@@ -1,126 +1,50 @@
 # AI Assistant Guide
 
-This file defines **mandatory project rules for AI coding agents**
-(e.g. GitHub Copilot Chat, Copilot Workspace, Cursor, Aider).
+This file provides guidance to AI coding assistants when working with code in this repository. This project is a **Native WeChat Mini Program** utilizing **JavaScript**, **SCSS**, the **TDesign** component library, and the **Vue-mini** framework.
 
-AI agents MUST follow the instructions below when working in this repository.
+## Core Directives (Mandatory)
 
----
+- **Simplicity & Maintainability:** Write code that is readable, layered, and easy to maintain.
+- **Consistency:** Strictly adhere to existing naming conventions, directory structures, and patterns (specifically within components/, pages/, and utils/).
+- **Component Reuse:** Prioritize using existing TDesign components located in miniprogram_npm/tdesign-miniprogram. Only extend or create new components if strictly necessary.
+- **Styling Rules:**Use **SCSS** (.scss) exclusively.Utilize **nested structures** for hierarchy.Prioritize existing CSS variables and mixins.Avoid introducing global styles that conflict with the existing design system.
+- **Change Protocol:** Before implementing breaking changes or large-scale refactoring, provide a detailed plan in the PR description or chat context and await user confirmation.
 
-## Core Principles (Must Follow)
+## Technical Stack & Context
 
-- Always keep changes **small, readable, and layered**.
-- Optimize for **long-term maintainability**, not short-term convenience.
-- Follow existing patterns instead of introducing new global abstractions.
+- **Platform:** WeChat Mini Program (Native Structure).
+- **Languages:** JavaScript (.js), SCSS (.scss).
+- **Framework:** `Vue-mini` (Lightweight wrapper implementing Composition API for native pages).
+- **UI Library:**  `TDesign Miniprogram`.
+- **Key Directories:**components/: Reusable custom components.pages/: Application pages (Standard bundle: .js, .json, .wxml, .scss).utils/: Utility functions.miniprogram_npm/: Third-party dependencies (TDesign, Vue-mini runtime, etc.).
 
----
+## Import Paths & Aliases
 
-## Project Context
+- The project uses resolveAlias in app.json. The @ symbol is mapped to the **project root**.
+- **Rule:** Always prioritize **Alias Imports** over relative paths to ensure cleanliness.✅ **Preferred:** import util from '@/utils/util.js'❌ **Avoid:** import util from '../../../utils/util.js'
 
-This repository is a **WeChat Mini Program** project.
+## Request Utilities
 
-- Platform: WeChat Mini Program (native structure)
-- Language: **JavaScript** (not TypeScript)
-- Styling: **SCSS**
-- Framework: **Vue-mini** (Composition-style API)
-- UI Library: **TDesign Mini Program**
-
----
-
-## Directory & Structure Rules
-
-- Always follow the existing directory structure and naming conventions.
-- Do NOT restructure folders unless explicitly instructed.
-
-Key directories include:
-
-- `components/` – reusable UI components
-- `pages/` – page entries (typically `.js / .json / .wxml / .scss`)
-- `models/` – business logic and device / protocol models
-- `utils/` – utility helpers (e.g. BLE, data processing)
-- `miniprogram_npm/` – third-party and UI component packages
-
----
-
-## UI & Component Rules
-
-- Always reuse **TDesign Mini Program** components before creating new UI.
-- TDesign components are located in:
-  `miniprogram_npm/tdesign-miniprogram`
-- Extend existing components only when necessary.
-
----
-
-## Styling Rules
-
-- Always write styles in **SCSS** (`.scss` files).
-- Follow existing variables, mixins, and nesting conventions.
-- Avoid introducing large or conflicting global styles.
-
----
-
-## Import & Alias Rules
-
-- The project configures path aliases via `app.json` (`resolveAlias`).
-- Prefer alias-based imports over relative paths.
-
-Examples:
-
-- ✅ `import util from '@/utils/util.js'`
-- ❌ `import util from '../../../utils/util.js'`
-
----
-
-## Development & Build Constraints
-
-- Do NOT introduce new build tools or frameworks without approval.
-- Always respect existing build and runtime configuration.
-- Avoid adding new global patterns when a local solution is sufficient.
-
----
-
-## Testing & Verification
-
-- Always verify new pages or components in **WeChat DevTools**.
-- Do NOT merge changes if core flows regress or console errors appear.
-- Never remove tests or checks just to make things “pass”.
-
----
-
-## Pull Request & Change Scope Rules
-
-- Always describe **breaking or wide-impact changes** clearly in PR notes.
-- Do NOT mix unrelated changes in a single PR.
-- Wait for confirmation before applying destructive refactors.
-
----
-
-## What NOT To Do
-
-- Do NOT refactor unrelated code.
-- Do NOT introduce new libraries casually.
-- Do NOT change public or shared APIs without instruction.
-- Do NOT guess requirements — explain assumptions if unclear.
-
----
-
-## Reference Documentation
-
-Use the following official references when needed:
-
-- Vue-mini: https://vuemini.org
-- TDesign Mini Program: https://tdesign.tencent.com/miniprogram/
-- WeChat Mini Program Docs:  
-  https://developers.weixin.qq.com/miniprogram/dev/framework/
-
----
-
-## Final Reminder
-
-This project values:
-
-- Predictability
-- Clarity of intent
-- Maintainable structure over clever tricks
-
-AI agents should behave as a **careful, conservative contributor**, not an experimental one.
+- **Global Methods:** Exposed in [app.js](app.js):
+	- `wx.$request | wx.$get | wx.$post | wx.$put | wx.$del`
+- **Core API:** See [utils/request.js](utils/request.js)
+	- **`request(options)`**
+		- **url:** Relative path joined with `baseURL`
+		- **method:** `GET | POST | PUT | DELETE` (default `GET`)
+		- **data:** Request payload object
+		- **header:** Merged headers; auto-injects `Authorization` from `wx.getStorageSync('token')` if present
+		- **timeout:** Default `15000ms`
+		- **showLoading:** `boolean | string` to show loading (e.g., `'加载中'`)
+		- **baseURL:** Optional per-call override
+	- **Helpers:** `get(url, data, options)`, `post(url, data, options)`, `put(url, data, options)`, `del(url, data, options)`
+- **Success & Errors:**
+ 	- Resolves for HTTP 2xx responses and returns the parsed response body.
+ 	- For non-2xx responses the Promise rejects with `{ message, statusCode, data }` where `data` is the server response body.
+ 	- For transport/network failures the Promise rejects with `{ message: 'network error', raw }` (where `raw` is the original error object).
+  
+- **Token Handling:** Store token (e.g., `Bearer_xxx`) to `wx.setStorageSync('token', token)`. `utils/request.js` will automatically read it from storage and inject it into the `Authorization` header when present.
+- **Usage Example (Login):**
+	- Endpoint: `/public/login`
+	- Call:
+		- `wx.$post('/public/login', { account, password }, { showLoading: '登录中' })`
+	- On success: Persist `result.token` and navigate.

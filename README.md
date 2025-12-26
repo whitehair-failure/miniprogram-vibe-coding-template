@@ -1,6 +1,10 @@
 # 原生微信小程序 Vibe Coding 模板（Vue-mini + TDesign）
 
-本项目是一个基于 Vibe Coding 的原生微信小程序模板，采用 JavaScript + SCSS，集成了 [Vue-mini](https://vuemini.org)（轻量级组合式 API）和 [TDesign](https://tdesign.tencent.com/miniprogram/) 小程序组件库。仓库内包含示例页面（`pages/index`），演示计数器及列表的添加与删除功能，便于快速上手开发。
+本项目是一个基于 Vibe Coding 的原生微信小程序模板，采用 JavaScript + SCSS，集成了 [Vue-mini](https://vuemini.org)（轻量级组合式 API）和 [TDesign](https://tdesign.tencent.com/miniprogram/) 小程序组件库。仓库内包含示例页面（`pages/index`）， TODO 清单用于展示代码功能，便于快速上手开发。
+
+## AGENTS 支持
+
+- 本项目附带 [AGENTS.md](AGENTS.md) 文件，详细说明了 AI 助手在协助开发时需遵循的规范，包括样式规则、组件复用、导入路径别名以及变更流程等。AGENTS.md 的中文版可在 `doc` 文件夹中找到。
 
 ## 快速开始
 
@@ -20,9 +24,28 @@ npm install
 
 - 项目已在 `app.json` 的 `resolveAlias` 配置（`@/*` 映射到项目根）。
 
-## AGENTS 支持
+## 请求封装与全局方法
 
-- 本项目包含 AI 助手指引文件 [AGENTS.md](AGENTS.md)，定义了在本仓库中协助开发时应遵循的约定（样式、组件、导入别名、变更流程等）。
+- 项目在 `app.js` 中将请求封装方法挂载到全局 `wx` 对象，方便在任意上下文调用：`wx.$request`、`wx.$get`、`wx.$post`、`wx.$put`、`wx.$del`。
+- 核心实现位于 `utils/request.js`，主要行为：
+	- `BASE_URL` 在文件中为占位符 `http://<your-domain>:<your-port>`；可在调用时通过 `baseURL` 覆盖或修改该常量以指向真实后端。
+	- 默认超时为 `15000` 毫秒；支持 `showLoading`（`boolean | string`）显示 loading 状态。
+	- 自动从 `wx.getStorageSync('token')` 读取 token（若存在）并注入到 `Authorization` 头中。
+	- 成功判定：HTTP 响应状态为 2xx 时 Promise 解析并返回解析后的响应体。
+	- 错误处理：非 2xx 响应时 Promise 拒绝，结构为 `{ message, statusCode, data }`；传输/网络错误时拒绝为 `{ message: 'network error', raw }`。
+
+- 示例（登录）：
+
+```js
+wx.$post('/public/login', { account, password }, { showLoading: '登录中' })
+.then(result => {
+	wx.setStorageSync('token', result.token);
+	// 导航或后续逻辑
+})
+.catch(err => {
+	// 处理错误
+});
+```
 
 ## 相关文档
 
