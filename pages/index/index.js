@@ -1,20 +1,20 @@
-import { computed, definePage, ref } from "@vue-mini/core";
+import { computed, definePage, ref } from '@vue-mini/core';
 
 definePage(() => {
-  const text = ref("");
+  const text = ref('');
   const items = ref([]);
-  const filter = ref("all");
+  const filter = ref('all');
 
-  const STORAGE_ITEMS_KEY = "todo_items";
-  const STORAGE_FILTER_KEY = "todo_filter";
+  const STORAGE_ITEMS_KEY = 'todo_items';
+  const STORAGE_FILTER_KEY = 'todo_filter';
 
   const total = computed(() => items.value.length);
   const completed = computed(() => items.value.filter((i) => i.done).length);
   const active = computed(() => total.value - completed.value);
 
   const filteredItems = computed(() => {
-    if (filter.value === "active") return items.value.filter((i) => !i.done);
-    if (filter.value === "done") return items.value.filter((i) => i.done);
+    if (filter.value === 'active') return items.value.filter((i) => !i.done);
+    if (filter.value === 'done') return items.value.filter((i) => i.done);
     return items.value;
   });
 
@@ -30,10 +30,10 @@ definePage(() => {
   }
 
   function addItem() {
-    const v = (text.value || "").trim();
+    const v = (text.value || '').trim();
     if (!v) return;
     items.value = [{ id: Date.now(), text: v, done: false }, ...items.value];
-    text.value = "";
+    text.value = '';
     saveState();
   }
 
@@ -44,7 +44,7 @@ definePage(() => {
   function toggleDone(e) {
     const id = String(e.currentTarget.dataset.id);
     items.value = items.value.map((item) =>
-      String(item.id) === id ? { ...item, done: !item.done } : item
+      String(item.id) === id ? { ...item, done: !item.done } : item,
     );
     saveState();
   }
@@ -80,9 +80,9 @@ definePage(() => {
   try {
     const savedFilter = wx.getStorageSync(STORAGE_FILTER_KEY);
     if (
-      savedFilter === "active" ||
-      savedFilter === "done" ||
-      savedFilter === "all"
+      savedFilter === 'active' ||
+      savedFilter === 'done' ||
+      savedFilter === 'all'
     ) {
       filter.value = savedFilter;
     }

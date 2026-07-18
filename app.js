@@ -1,21 +1,21 @@
-import { createApp, onAppShow, onAppHide, onAppError } from "@vue-mini/core";
-import { request, get, post, put, del } from "@/utils/request.js";
+import { createApp, onAppShow, onAppHide, onAppError } from '@vue-mini/core';
+import { request, get, post, put, del } from '@/utils/request.js';
 
 createApp({
   setup() {
     onAppShow(() => {
-      console.log("show");
+      console.log('show');
     });
     onAppHide(() => {
-      console.log("hide");
+      console.log('hide');
     });
     onAppError(() => {
-      console.log("error");
+      console.log('error');
     });
 
     // 兼容性：也把方法挂到全局 wx 对象，方便在非 page/context 环境下调用
     try {
-      if (typeof wx !== "undefined") {
+      if (typeof wx !== 'undefined') {
         wx.$request = request;
         wx.$get = get;
         wx.$post = post;
