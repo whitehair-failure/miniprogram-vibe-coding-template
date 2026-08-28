@@ -1,6 +1,6 @@
 # AI Assistant Guide
 
-This file provides guidance to AI coding assistants when working with code in this repository. This project is a **Native WeChat Mini Program** utilizing **JavaScript**, **SCSS**, the **TDesign** component library, and the **Vue-mini** framework.
+This file provides guidance to AI coding assistants when working with code in this repository. This project is a **Native WeChat Mini Program** utilizing **JavaScript**, **SCSS**, the **TDesign** component library.
 
 ## Core Directives (Mandatory)
 
@@ -14,9 +14,8 @@ This file provides guidance to AI coding assistants when working with code in th
 
 - **Platform:** WeChat Mini Program (Native Structure).
 - **Languages:** JavaScript (.js), SCSS (.scss).
-- **Framework:** `Vue-mini` (Lightweight wrapper implementing Composition API for native pages).
 - **UI Library:**  `TDesign Miniprogram`.
-- **Key Directories:**components/: Reusable custom components.pages/: Application pages (Standard bundle: .js, .json, .wxml, .scss).utils/: Utility functions.miniprogram_npm/: Third-party dependencies (TDesign, Vue-mini runtime, etc.).
+- **Key Directories:**components/: Reusable custom components.pages/: Application pages (Standard bundle: .js, .json, .wxml, .scss).utils/: Utility functions.miniprogram_npm/: Third-party dependencies (TDesign, etc.).
 
 ## Import Paths & Aliases
 

@@ -24,6 +24,7 @@ coverage/
 .cache/
 tmp/
 temp/
+.workbuddy/
 
 # Environment
 .env

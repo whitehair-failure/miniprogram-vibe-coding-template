@@ -1,6 +1,6 @@
-# 原生微信小程序 Vibe Coding 模板（Vue-mini + TDesign）
+# 原生微信小程序 Vibe Coding 模板（TDesign）
 
-本项目是一个基于 Vibe Coding 的原生微信小程序模板，采用 JavaScript + SCSS，集成了 [Vue-mini](https://vuemini.org)（轻量级组合式 API）和 [TDesign](https://tdesign.tencent.com/miniprogram/) 小程序组件库。仓库内包含示例页面（`pages/index`）， TODO 清单用于展示代码功能，便于快速上手开发。
+本项目是一个基于 Vibe Coding 的原生微信小程序模板，采用 JavaScript + SCSS，集成了 [TDesign](https://tdesign.tencent.com/miniprogram/) 小程序组件库。仓库内包含示例页面（`pages/index`）， TODO 清单用于展示代码功能，便于快速上手开发。
 
 ## AGENTS 支持
 
@@ -49,6 +49,5 @@ wx.$post('/public/login', { account, password }, { showLoading: '登录中' })
 
 ## 相关文档
 
-- [Vue-mini](https://vuemini.org) - 框架文档
 - [TDesign](https://tdesign.tencent.com/miniprogram/) - 组件框架
 - [微信小程序](https://developers.weixin.qq.com/miniprogram/dev/framework/) - 平台文档
