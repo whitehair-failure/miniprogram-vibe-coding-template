@@ -11,7 +11,7 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
-    "tdesign-miniprogram": "^1.12.0"
+    "tdesign-miniprogram": "^1.16.0"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
