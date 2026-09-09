@@ -1,0 +1,57 @@
+# Dependabot 配置（v2）
+# 文档：https://docs.github.com/code-security/dependabot/dependabot-version-updates/configuration-options-for-the-dependabot.yml-file
+# 注意：GitHub 只会读取「默认分支」上的 .github/dependabot.yml，本配置需在默认分支（main）上生效；
+#       其他分支（如 native）通过 target-branch 指定，无需各自维护一份配置文件。
+version: 2
+
+updates:
+  # ---------- main：基础模板分支（Vue-mini + TDesign） ----------
+  - package-ecosystem: "npm"
+    directory: "/"
+    target-branch: "main"
+    schedule:
+      interval: "weekly"
+      # 每周一 09:00（UTC）执行，避开工作日高峰
+      day: "monday"
+      time: "09:00"
+      timezone: "Asia/Shanghai"
+    open-pull-requests-limit: 10
+    versioning-strategy: "increase"
+    labels:
+      - "dependencies"
+      - "branch:main"
+    commit-message:
+      prefix: "chore(deps)"
+      prefix-development: "chore(deps-dev)"
+      include: "scope"
+
+  # ---------- native：原生小程序分支 ----------
+  - package-ecosystem: "npm"
+    directory: "/"
+    target-branch: "native"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+      timezone: "Asia/Shanghai"
+    open-pull-requests-limit: 10
+    versioning-strategy: "increase"
+    labels:
+      - "dependencies"
+      - "branch:native"
+    commit-message:
+      prefix: "chore(deps)"
+      prefix-development: "chore(deps-dev)"
+      include: "scope"
+
+  # ---------- GitHub Actions（可选）：保持工作流引用的 action 版本最新 ----------
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+      timezone: "Asia/Shanghai"
+    labels:
+      - "dependencies"
+      - "github-actions"

@@ -47,6 +47,23 @@ wx.$post('/public/login', { account, password }, { showLoading: '登录中' })
 });
 ```
 
+## 依赖更新说明
+
+本仓库已配置 [Dependabot](https://docs.github.com/code-security/dependabot)，每周一 09:00（Asia/Shanghai）自动检查 `main`、`native` 各分支的 npm 依赖，并把可升级项提交为 PR，保持各分支依赖为最新稳定版。
+
+配套自动化策略（`.github/workflows/auto-merge.yml`）：
+
+- **补丁更新（patch）与小版本更新（minor）**：由 Dependabot 机器人发起的 PR 会被自动批准，并在 CI 通过后以 Squash 方式自动合并。
+- **大版本更新（major）**：不自动合并，会打上 `semver-major` 标签并留言提醒，需人工审核破坏性变更后再合并。
+
+> 提示：若仓库启用了分支保护规则，需在 Settings → General 中勾选 **Allow auto-merge**，并在分支保护规则中允许 `github-actions[bot]` 的审批，否则自动合并不会生效。
+
+本地手动升级依赖：Clone 项目后，可随时运行以下命令，将 `package.json` 中的依赖直接升级至当天最新的社区版本并重新安装：
+
+```bash
+npm run update-deps
+```
+
 ## 相关文档
 
 - [Vue-mini](https://vuemini.org) - 框架文档

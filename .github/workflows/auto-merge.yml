@@ -1,0 +1,52 @@
+name: Dependabot auto-merge
+
+# 使用 pull_request_target 以便工作流具备写权限（可审批 / 合并）。
+# 本工作流只执行 gh CLI 只读操作与合并动作，不 checkout、不执行 PR 中的代码，
+# 因此不存在 fork 代码执行风险。
+on: pull_request_target
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  auto-merge:
+    name: 自动批准并合并 Dependabot PR
+    runs-on: ubuntu-latest
+    # 仅处理 dependabot[bot] 发起的 PR
+    if: ${{ github.actor == 'dependabot[bot]' }}
+
+    steps:
+      - name: 获取 Dependabot 元数据
+        id: metadata
+        uses: dependabot/fetch-metadata@v2
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: 输出更新类型
+        run: |
+          echo "依赖：${{ steps.metadata.outputs.dependency-names }}"
+          echo "更新类型：${{ steps.metadata.outputs.update-type }}"
+          echo "从 ${{ steps.metadata.outputs.previous-version }} 升级到 ${{ steps.metadata.outputs.new-version }}"
+
+      # 小版本（semver:minor）与补丁（semver:patch）：自动批准 + Squash 自动合并
+      - name: 自动批准并合并（minor / patch）
+        if: >-
+          steps.metadata.outputs.update-type == 'version-update:semver-minor' ||
+          steps.metadata.outputs.update-type == 'version-update:semver-patch'
+        run: |
+          gh pr review --approve "$PR_URL" || echo "已审批或无需审批"
+          gh pr merge --auto --squash "$PR_URL"
+        env:
+          PR_URL: ${{ github.event.pull_request.html_url }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      # 大版本（semver:major）：保持人工审核，仅打标签 + 留言提醒
+      - name: 标记大版本更新需人工审核
+        if: ${{ steps.metadata.outputs.update-type == 'version-update:semver-major' }}
+        run: |
+          gh pr edit "$PR_URL" --add-label "semver-major"
+          gh pr comment "$PR_URL" --body "⚠️ 该依赖为大版本更新（major），存在破坏性变更风险，已跳过自动合并，请人工审核后再合并。"
+        env:
+          PR_URL: ${{ github.event.pull_request.html_url }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -4,7 +4,8 @@
   "main": "app.js",
   "scripts": {
     "lint": "eslint .",
-    "lint:fix": "eslint . --fix"
+    "lint:fix": "eslint . --fix",
+    "update-deps": "npx npm-check-updates -u && npm install"
   },
   "keywords": [],
   "author": "",
